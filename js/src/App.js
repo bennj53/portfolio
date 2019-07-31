@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import './App.css';
 
 function App() {
@@ -6,12 +6,22 @@ function App() {
   const video = useRef(null);
   const audio = useRef(null);
   const btn = useRef(null);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     if (audio.current) {
       playSound();
     }
+    hello();
   }, [audio.current])
+
+  const hello = () => {
+    fetch('/api/hello')
+      .then(response => response.text())
+      .then(message => {
+        setMessage(message);
+      });
+  };
 
   function myFunction() {
     if (video.current.paused) {
@@ -52,7 +62,7 @@ function App() {
 
       <div className="content">
         <h1>By BennJ</h1>
-        <p>ACDC pour bien démarrer, continuer ou finir la journée.</p>
+        <h2>{message}</h2>
         <button id="myBtn" ref={btn} onClick={myFunction}>Pause</button>
 
         <figure>
